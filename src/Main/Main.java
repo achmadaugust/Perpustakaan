@@ -64,7 +64,7 @@ public class Main {
             System.out.print("Password : ");
             String password = in.nextLine();
 
-            petugas = service.getLoginStatement(username, password);
+            petugas = service.getLogin(username, password);
 
             if (petugas != null) {
                 loggedin = true;
@@ -138,7 +138,7 @@ public class Main {
             String pilih = in.nextLine();
             switch (pilih) {
                 case "1":
-                    List<Peminjaman> peminjamanR = service.getAllPeminjaman();
+                   List<Peminjaman> peminjamanR = service.getAllPeminjaman();
                     if (peminjamanR.isEmpty()) {
                         System.out.println("\nBelum ada peminjaman.");
                     } else {

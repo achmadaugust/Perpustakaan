@@ -27,7 +27,7 @@ public class TransaksiDaoJdbc {
     private PreparedStatement deleteStatement;
     private PreparedStatement getAllStatement;
     private PreparedStatement getByIdStatement;
-    private PreparedStatement getIdByJudulStatement;
+    private PreparedStatement getIdByBukuStatement;
 
     private final String insertQuery = "insert into PINJAM(id_buku,npm,"
             + "tgl_dipinjam,tgl_kembali,tgl_dikembalikan) values(?,?,?,?,?)";
@@ -37,7 +37,7 @@ public class TransaksiDaoJdbc {
     private final String deleteQuery = "delete from PINJAM where id_trans=?";
     private final String getByIdQuery = "select * from PINJAM where id_trans=?";
     private final String getAllQuery = "select * from PINJAM";
-    private final String getIdByJudulQuery = "SELECT * from PINJAM WHERE id_buku=?";
+    private final String getIdByBukuQuery = "SELECT * from PINJAM WHERE id_buku=?";
 
     public void setConnection(Connection connection) throws SQLException {
         this.connection = connection;
@@ -46,7 +46,7 @@ public class TransaksiDaoJdbc {
         deleteStatement = this.connection.prepareStatement(deleteQuery);
         getByIdStatement = this.connection.prepareStatement(getByIdQuery);
         getAllStatement = this.connection.prepareStatement(getAllQuery);
-        getIdByJudulStatement = this.connection.prepareStatement(getIdByJudulQuery);
+        getIdByBukuStatement = this.connection.prepareStatement(getIdByBukuQuery);
     }
 
     public Transaksi save(Transaksi transaksi) throws SQLException{
@@ -115,9 +115,9 @@ public class TransaksiDaoJdbc {
         return transaksis;
     }
 
-    public int getIdByJudul(int buku) throws SQLException{
-        getIdByJudulStatement.setInt(1, buku);
-        ResultSet rs = getIdByJudulStatement.executeQuery();
+    public int getIdByBuku(int buku) throws SQLException{
+        getIdByBukuStatement.setInt(1, buku);
+        ResultSet rs = getIdByBukuStatement.executeQuery();
         if(rs.next()){
             int id = rs.getInt("id");
             return id;

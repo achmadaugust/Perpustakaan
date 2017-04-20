@@ -91,6 +91,15 @@ public class ServiceJdbc {
         return null;
     }
 
+    public Petugas getLogin(String nama, String password){
+        try {
+            return petugasDao.login(nama, password);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+    
     public Buku save(Buku buku){
         try {
             //set id
@@ -190,4 +199,54 @@ public class ServiceJdbc {
         }
         return null;
     }
+    
+    public Transaksi save(Transaksi transaksi){
+        try {
+            //set id
+            connection.setAutoCommit(false);
+            int id = transaksiDao.getIdByBuku(transaksi.getIdTrans());
+            connection.commit();
+            connection.setAutoCommit(true);
+            if(id != 0){
+                transaksi.setIdTrans(id);
+                return transaksi;
+            }
+
+            connection.setAutoCommit(false);
+            transaksiDao.save(transaksi);
+            connection.commit();
+            connection.setAutoCommit(true);
+
+        } catch (SQLException ex) {
+            try{
+                connection.rollback();
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
+        return transaksi;
+    }
+    public Transaksi delete(Transaksi transaksi){
+        try {
+            connection.setAutoCommit(false);
+            transaksiDao.save(transaksi);
+            connection.commit();
+            connection.setAutoCommit(true);
+        } catch (SQLException ex) {
+            try{
+                connection.rollback();
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
+        return transaksi;
+    }
+    public Transaksi getTransaksi(int id){
+        try {
+            return transaksiDao.getById(id);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }    
 }
