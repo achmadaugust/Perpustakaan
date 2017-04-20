@@ -31,7 +31,7 @@ public class MahasiswaDaoJdbc {
 
     private final String insertQuery = "insert into MAHASISWA(nama,tgl_lahir," + 
             "alamat) values(?,?,?)";
-    private final String updateQuery = "update MAHASISWA set npm=?, nama=?," +
+    private final String updateQuery = "update MAHASISWA set nama=?," +
             " tgl_lahir=? alamat=? where npm=?";
     private final String deleteQuery = "delete from MAHASISWA where npm=?";
     private final String getByIdQuery = "select * from MAHASISWA where npm=?";

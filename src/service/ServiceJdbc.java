@@ -199,7 +199,14 @@ public class ServiceJdbc {
         }
         return null;
     }
-    
+    public Mahasiswa getAll(){
+        try {
+            return (Mahasiswa) mahasiswaDao.getAll();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
     public Transaksi save(Transaksi transaksi){
         try {
             //set id
