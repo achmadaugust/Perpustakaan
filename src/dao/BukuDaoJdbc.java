@@ -29,14 +29,13 @@ public class BukuDaoJdbc {
     private PreparedStatement getByIdStatement;
     private PreparedStatement getIdByJudulStatement;
 
-    private final String insertQuery = "insert into BUKU(judul,penulis,) "
-            + "values(?,?,?)";
+    private final String insertQuery = "insert into BUKU(judul,penulis,kategori) values(?,?,?)";
     private final String updateQuery = "update BUKU set judul=?, " +
-            " penulis=? kategori=? where id=?";
-    private final String deleteQuery = "delete from BUKU where id=?";
-    private final String getByIdQuery = "select * from BUKU where id =?";
+            " penulis=?, kategori=? where id_buku=?";
+    private final String deleteQuery = "delete from BUKU where id_buku=?";
+    private final String getByIdQuery = "select * from BUKU where id_buku=?";
     private final String getAllQuery = "select * from BUKU";
-    private final String getIdByJudulQuery = "SELECT * from BUKU WHERE nama=?";
+    private final String getIdByJudulQuery = "SELECT * from BUKU WHERE judul=?";
 
     public void setConnection(Connection connection) throws SQLException {
         this.connection = connection;
@@ -65,7 +64,7 @@ public class BukuDaoJdbc {
             updateStatement.setString(1, buku.getJudul());
             updateStatement.setString(2, buku.getPenulis());
             updateStatement.setString(3, buku.getKategori());
-            updateStatement.setLong(4, buku.getId());
+            updateStatement.setInt(4, buku.getId());
             updateStatement.executeUpdate();
         }
         return buku;
@@ -83,7 +82,7 @@ public class BukuDaoJdbc {
         //proses mapping dari relational ke object
         if (rs.next()) {
             Buku buku = new Buku();
-            buku.setId(rs.getInt("id"));
+            buku.setId(rs.getInt("id_buku"));
             buku.setJudul(rs.getString("Judul"));
             buku.setPenulis(rs.getString("Penulis"));
             buku.setKategori(rs.getString("Kategori"));
@@ -97,7 +96,7 @@ public class BukuDaoJdbc {
         ResultSet rs = getAllStatement.executeQuery();
         while(rs.next()){
             Buku buku = new Buku();
-            buku.setId(rs.getInt("id"));
+            buku.setId(rs.getInt("id_buku"));
             buku.setJudul(rs.getString("Judul"));
             buku.setPenulis(rs.getString("Penulis"));
             buku.setKategori(rs.getString("Kategori"));
@@ -110,7 +109,7 @@ public class BukuDaoJdbc {
         getIdByJudulStatement.setString(1, judul);
         ResultSet rs = getIdByJudulStatement.executeQuery();
         if(rs.next()){
-            int id = rs.getInt("id");
+            int id = rs.getInt("id_buku");
             return id;
         }
         return 0;

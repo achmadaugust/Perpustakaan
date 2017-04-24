@@ -13,10 +13,12 @@ public class Transaksi {
     
     private int idTrans;
     private int npm;
+    private String nama;
     private int IdBuku;
-    private int datePinjam;
-    private int dateKembali;
-    private int dateDiKembalikan;
+    private String judul;
+    private String datePinjam;
+    private String dateKembali;
+    private String dateDiKembalikan;
 
     public int getIdTrans() {
         return idTrans;
@@ -34,6 +36,14 @@ public class Transaksi {
         this.npm = npm;
     }
 
+    public String getNama() {
+        return nama;
+    }
+
+    public void setNama(String nama) {
+        this.nama = nama;
+    }
+
     public int getIdBuku() {
         return IdBuku;
     }
@@ -42,27 +52,35 @@ public class Transaksi {
         this.IdBuku = IdBuku;
     }
 
-    public int getDatePinjam() {
+    public String getJudul() {
+        return judul;
+    }
+
+    public void setJudul(String judul) {
+        this.judul = judul;
+    }
+
+    public String getDatePinjam() {
         return datePinjam;
     }
 
-    public void setDatePinjam(int datePinjam) {
+    public void setDatePinjam(String datePinjam) {
         this.datePinjam = datePinjam;
     }
 
-    public int getDateKembali() {
+    public String getDateKembali() {
         return dateKembali;
     }
 
-    public void setDateKembali(int dateKembali) {
+    public void setDateKembali(String dateKembali) {
         this.dateKembali = dateKembali;
     }
 
-    public int getDateDiKembalikan() {
+    public String getDateDiKembalikan() {
         return dateDiKembalikan;
     }
 
-    public void setDateDiKembalikan(int dateDiKembalikan) {
+    public void setDateDiKembalikan(String dateDiKembalikan) {
         this.dateDiKembalikan = dateDiKembalikan;
     }
     

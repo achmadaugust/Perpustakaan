@@ -30,13 +30,29 @@ public class TransaksiDaoJdbc {
     private PreparedStatement getIdByBukuStatement;
 
     private final String insertQuery = "insert into PINJAM(id_buku,npm,"
-            + "tgl_dipinjam,tgl_kembali,tgl_dikembalikan) values(?,?,?,?,?)";
-    private final String updateQuery = "update PINJAM set id_buku=?, " +
-            " npm=? tgl_dipinjam=? tgl_kembali=? tgl_dikembalikan=? " + 
+            + "tgl_dipinjam,tgl_kembali) values(?,?,?,?)";
+    private final String updateQuery = "update PINJAM set tgl_dikembalikan=? " + 
             "where id_trans=?";
     private final String deleteQuery = "delete from PINJAM where id_trans=?";
-    private final String getByIdQuery = "select * from PINJAM where id_trans=?";
-    private final String getAllQuery = "select * from PINJAM";
+    private final String getByIdQuery = 
+            "select "
+            + "pinjam.id_trans,"
+            + "mahasiswa.npm,mahasiswa.NAMA,"
+            + "buku.ID_buku,buku.JUDUL,"
+            + "pinjam.TGL_DIPINJAM,pinjam.TGL_KEMBALI,pinjam.TGL_DIKEMBALIKAN "
+            + "from pinjam,mahasiswa,buku "
+            + "where "
+            + "mahasiswa.npm=pinjam.npm and buku.ID_BUKU=pinjam.ID_BUKU and id_trans=?";
+//"select * from PINJAM where id_trans=?";
+    private final String getAllQuery = 
+            "select "
+            + "pinjam.id_trans,"
+            + "mahasiswa.npm,mahasiswa.NAMA,"
+            + "buku.ID_buku,buku.JUDUL,"
+            + "pinjam.TGL_DIPINJAM,pinjam.TGL_KEMBALI,pinjam.TGL_DIKEMBALIKAN "
+            + "from pinjam,mahasiswa,buku "
+            + "where "
+            + "mahasiswa.npm=pinjam.npm and buku.ID_BUKU=pinjam.ID_BUKU";
     private final String getIdByBukuQuery = "SELECT * from PINJAM WHERE id_buku=?";
 
     public void setConnection(Connection connection) throws SQLException {
@@ -53,9 +69,9 @@ public class TransaksiDaoJdbc {
         if (transaksi.getIdTrans() == 0) {
             insertStatement.setInt(1, transaksi.getIdBuku());
             insertStatement.setInt(2, transaksi.getNpm());
-            insertStatement.setInt(3, transaksi.getDatePinjam());
-            insertStatement.setInt(4, transaksi.getDateKembali());
-            insertStatement.setInt(5, transaksi.getDateDiKembalikan());
+            insertStatement.setString(3, transaksi.getDatePinjam());
+            insertStatement.setString(4, transaksi.getDateKembali());
+//            insertStatement.setString(5, transaksi.getDateDiKembalikan());
             int xid = (int) insertStatement.executeUpdate();
 //            ambil id
             ResultSet rs = insertStatement.getGeneratedKeys();
@@ -65,12 +81,12 @@ public class TransaksiDaoJdbc {
             }
 //            person.setId(getIdByName(person.getName()));
         } else {
-            updateStatement.setInt(1, transaksi.getIdBuku());
-            updateStatement.setInt(2, transaksi.getNpm());
-            updateStatement.setInt(3, transaksi.getDatePinjam());
-            updateStatement.setInt(4, transaksi.getDateKembali());
-            updateStatement.setInt(5, transaksi.getDateDiKembalikan());
-            updateStatement.setInt(6, transaksi.getIdTrans());
+//            updateStatement.setInt(1, transaksi.getIdBuku());
+//            updateStatement.setInt(2, transaksi.getNpm());
+//            updateStatement.setString(3, transaksi.getDatePinjam());
+//            updateStatement.setString(4, transaksi.getDateKembali());
+            updateStatement.setString(1, transaksi.getDateDiKembalikan());
+            updateStatement.setInt(2, transaksi.getIdTrans());
             updateStatement.executeUpdate();
         }
         return transaksi;
@@ -88,12 +104,14 @@ public class TransaksiDaoJdbc {
         //proses mapping dari relational ke object
         if (rs.next()) {
             Transaksi transaksi = new Transaksi();
-            transaksi.setIdTrans(rs.getInt("id"));
+            transaksi.setIdTrans(rs.getInt("id_trans"));
             transaksi.setNpm(rs.getInt("npm"));
-            transaksi.setIdBuku(rs.getInt("buku"));
-            transaksi.setDatePinjam(rs.getInt("pinjam"));
-            transaksi.setDateKembali(rs.getInt("kembali"));
-            transaksi.setDateDiKembalikan(rs.getInt("dikembalikan"));
+            transaksi.setNama(rs.getString("nama"));
+            transaksi.setIdBuku(rs.getInt("id_buku"));
+            transaksi.setJudul(rs.getString("judul"));
+            transaksi.setDatePinjam(rs.getString("tgl_dipinjam"));
+            transaksi.setDateKembali(rs.getString("tgl_kembali"));
+            transaksi.setDateDiKembalikan(rs.getString("tgl_dikembalikan"));
             return transaksi;
         }
         return null;
@@ -104,12 +122,14 @@ public class TransaksiDaoJdbc {
         ResultSet rs = getAllStatement.executeQuery();
         while(rs.next()){
             Transaksi transaksi = new Transaksi();
-            transaksi.setIdTrans(rs.getInt("id"));
+            transaksi.setIdTrans(rs.getInt("id_trans"));
             transaksi.setNpm(rs.getInt("npm"));
-            transaksi.setIdBuku(rs.getInt("buku"));
-            transaksi.setDatePinjam(rs.getInt("pinjam"));
-            transaksi.setDateKembali(rs.getInt("kembali"));
-            transaksi.setDateDiKembalikan(rs.getInt("dikembalikan"));
+            transaksi.setNama(rs.getString("nama"));
+//            transaksi.setIdBuku(rs.getInt("id_buku"));
+            transaksi.setJudul(rs.getString("Judul"));
+            transaksi.setDatePinjam(rs.getString("tgl_dipinjam"));
+            transaksi.setDateKembali(rs.getString("tgl_kembali"));
+            transaksi.setDateDiKembalikan(rs.getString("tgl_dikembalikan"));
             transaksis.add(transaksi);
         }
         return transaksis;

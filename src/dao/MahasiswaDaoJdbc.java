@@ -32,7 +32,7 @@ public class MahasiswaDaoJdbc {
     private final String insertQuery = "insert into MAHASISWA(nama,tgl_lahir," + 
             "alamat) values(?,?,?)";
     private final String updateQuery = "update MAHASISWA set nama=?," +
-            " tgl_lahir=? alamat=? where npm=?";
+            " tgl_lahir=?, alamat=? where npm=?";
     private final String deleteQuery = "delete from MAHASISWA where npm=?";
     private final String getByIdQuery = "select * from MAHASISWA where npm=?";
     private final String getAllQuery = "select * from MAHASISWA";
@@ -49,32 +49,33 @@ public class MahasiswaDaoJdbc {
     }
 
     public Mahasiswa save(Mahasiswa mahasiswa) throws SQLException{
-        if (mahasiswa.getNpm() == 0) {
-//            insertStatement.setInt(1, mahasiswa.getNpm());
+        if (mahasiswa.getNpm() == null) {
             insertStatement.setString(1, mahasiswa.getNama());
-            insertStatement.setInt(2, mahasiswa.getDate());
+            insertStatement.setString(2, mahasiswa.getDate());
             insertStatement.setString(3, mahasiswa.getAlamat());
-            int xid = (int) insertStatement.executeUpdate();
-//            ambil id
+            Long xnpm = (long) insertStatement.executeUpdate();
+////            ambil id
             ResultSet rs = insertStatement.getGeneratedKeys();
             if(rs.next()){
-                int id = rs.getInt(1);
-                mahasiswa.setNpm(id);
+                Long npm = rs.getLong(1);
+                mahasiswa.setNpm(npm);
             }
-//            person.setId(getIdByName(person.getName()));
+//            mahasiswa.setNpm(getIdByName(mahasiswa.getNama()));
         } else {
-//            updateStatement.setInt(1, mahasiswa.getNpm());
+//        return mahasiswa;
+    
+//    public Mahasiswa update(Mahasiswa mahasiswa) throws SQLException{
             updateStatement.setString(1, mahasiswa.getNama());
-            updateStatement.setInt(2, mahasiswa.getDate());
+            updateStatement.setString(2, mahasiswa.getDate());
             updateStatement.setString(3, mahasiswa.getAlamat());
-            updateStatement.setInt(4, mahasiswa.getNpm());
+            updateStatement.setLong(4, mahasiswa.getNpm());
             updateStatement.executeUpdate();
         }
         return mahasiswa;
     }
 
     public Mahasiswa delete(Mahasiswa mahasiswa) throws SQLException{
-        deleteStatement.setInt(1, mahasiswa.getNpm());
+        deleteStatement.setLong(1, mahasiswa.getNpm());
         deleteStatement.executeUpdate();
         return mahasiswa;
     }
@@ -86,9 +87,9 @@ public class MahasiswaDaoJdbc {
         if (rs.next()) {
             Mahasiswa mahasiswa = new Mahasiswa();
 //            mahasiswa.setId_mhs(rs.getLong("id_mhs"));
-            mahasiswa.setNpm(rs.getInt("Npm"));
+            mahasiswa.setNpm(rs.getLong("Npm"));
             mahasiswa.setNama(rs.getString("Nama"));
-            mahasiswa.setDate(rs.getInt("Date"));
+            mahasiswa.setDate(rs.getString("tgl_lahir"));
             mahasiswa.setAlamat(rs.getString("Alamat"));
             return mahasiswa;
         }
@@ -101,23 +102,23 @@ public class MahasiswaDaoJdbc {
         while(rs.next()){
             Mahasiswa mahasiswa = new Mahasiswa();
 //            mahasiswa.setId_mhs(rs.getLong("id_mhs"));
-            mahasiswa.setNpm(rs.getInt("Npm"));
+            mahasiswa.setNpm(rs.getLong("Npm"));
             mahasiswa.setNama(rs.getString("Nama"));
-            mahasiswa.setDate(rs.getInt("Date"));
+            mahasiswa.setDate(rs.getString("Tgl_Lahir"));
             mahasiswa.setAlamat(rs.getString("Alamat"));
             mahasiswas.add(mahasiswa);
         }
         return mahasiswas;
     }
 
-    public int getIdByName(String nama) throws SQLException{
+    public Long getIdByName(String nama) throws SQLException{
         getIdByNameStatement.setString(1, nama);
         ResultSet rs = getIdByNameStatement.executeQuery();
         if(rs.next()){
-            int id = rs.getInt("npm");
+            Long id = rs.getLong("npm");
             return id;
         }
-        return 0;
+        return null;
     }
 
 }

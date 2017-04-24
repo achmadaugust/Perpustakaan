@@ -13,6 +13,7 @@ import model.Transaksi;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by hahn on 16/03/17.
@@ -111,7 +112,6 @@ public class ServiceJdbc {
                 buku.setId(id);
                 return buku;
             }
-
             connection.setAutoCommit(false);
             bukuDao.save(buku);
             connection.commit();
@@ -129,7 +129,7 @@ public class ServiceJdbc {
     public Buku delete(Buku buku){
         try {
             connection.setAutoCommit(false);
-            bukuDao.save(buku);
+            bukuDao.delete(buku);
             connection.commit();
             connection.setAutoCommit(true);
         } catch (SQLException ex) {
@@ -148,25 +148,31 @@ public class ServiceJdbc {
             ex.printStackTrace();
         }
         return null;
+    }
+    public List<Buku> getAllBuku(){
+        try {
+            return bukuDao.getAll();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }    
     
     public Mahasiswa save(Mahasiswa mahasiswa){
         try {
             //set id
             connection.setAutoCommit(false);
-            int id = mahasiswaDao.getIdByName(mahasiswa.getNama());
+            Long id = mahasiswaDao.getIdByName(mahasiswa.getNama());
             connection.commit();
             connection.setAutoCommit(true);
-            if(id != 0){
+            if(id != null){
                 mahasiswa.setNpm(id);
                 return mahasiswa;
             }
-
             connection.setAutoCommit(false);
             mahasiswaDao.save(mahasiswa);
             connection.commit();
             connection.setAutoCommit(true);
-
         } catch (SQLException ex) {
             try{
                 connection.rollback();
@@ -176,10 +182,25 @@ public class ServiceJdbc {
         }
         return mahasiswa;
     }
+//    public Mahasiswa update(Mahasiswa mahasiswa){
+//        try{
+//            connection.setAutoCommit(false);
+//            mahasiswaDao.update(mahasiswa);
+//            connection.commit();
+//            connection.setAutoCommit(true);
+//        } catch (SQLException ex){
+//            try {
+//                connection.rollback();
+//            } catch (SQLException e){
+//                e.printStackTrace();
+//            }
+//        }
+//        return mahasiswa;
+//    }
     public Mahasiswa delete(Mahasiswa mahasiswa){
         try {
             connection.setAutoCommit(false);
-            mahasiswaDao.save(mahasiswa);
+            mahasiswaDao.delete(mahasiswa);
             connection.commit();
             connection.setAutoCommit(true);
         } catch (SQLException ex) {
@@ -199,9 +220,9 @@ public class ServiceJdbc {
         }
         return null;
     }
-    public Mahasiswa getAll(){
+    public List<Mahasiswa> getAllMhs(){
         try {
-            return (Mahasiswa) mahasiswaDao.getAll();
+            return mahasiswaDao.getAll();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -255,5 +276,14 @@ public class ServiceJdbc {
             ex.printStackTrace();
         }
         return null;
-    }    
+    }
+
+    public List<Transaksi> getAllTrans(){
+        try {
+            return transaksiDao.getAll();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 }

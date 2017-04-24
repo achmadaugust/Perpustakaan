@@ -12,9 +12,9 @@ package model;
 public class Mahasiswa {
     
 //    private int Id_mhs;
-    private int npm;
+    private Long npm;
     private String nama;
-    private int date;
+    private String date;
     private String alamat;
 
 //    public Long getId_mhs() {
@@ -33,11 +33,11 @@ public class Mahasiswa {
 //        this.Id_mhs = Id_mhs;
 //    }
 
-    public int getNpm() {
+    public Long getNpm() {
         return npm;
     }
 
-    public void setNpm(int npm) {
+    public void setNpm(Long npm) {
         this.npm = npm;
     }
 
@@ -49,11 +49,11 @@ public class Mahasiswa {
         this.nama = nama;
     }
 
-    public int getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(int date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
